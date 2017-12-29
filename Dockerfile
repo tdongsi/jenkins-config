@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:lts
 MAINTAINER dongsi.tuecuong@gmail.com
 
-# Over provisioning flags for Kubernets plugin.
+# Over provisioning flags for Kubernetes plugin.
 # By default, Jenkins spawns agents conservatively.
 # Reference: https://github.com/jenkinsci/kubernetes-plugin#over-provisioning-flags
 # Do not change these values unless you know what you are doing.
