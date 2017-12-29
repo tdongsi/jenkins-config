@@ -7,6 +7,11 @@ Jenkins config as code
 docker build -t myjenkins:latest .
 mkdir jdata
 docker run -p 8080:8080 -p 50000:50000 -v jdata:/var/jenkins_home myjenkins
+
+docker run --rm --name jenkins-local -v mavenrepo:/root/.m2 \
+-v ~/Matrix/jenkins-shared-library:/var/jenkins_home/pipeline-library \
+-v ~/Matrix/jenkins-global-library:/var/jenkins_home/pipeline-libs \
+-e DEV_HOST=127.0.0.1 -p 8080:8080 -p 50000:50000 myjenkins:latest
 ```
 
 **Reference**:
