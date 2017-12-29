@@ -27,6 +27,8 @@ Jenkins.instance.pluginManager.plugins.sort { it.shortName }.each {
 }
 ```
 
+Other methods can be found in [this Stackoverflow thread](https://stackoverflow.com/questions/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair).
+
 #### Kubernetes plugin
 
 For Kubernetes plugin, we have to add provisioning flags, based on [its recommendation](https://github.com/jenkinsci/kubernetes-plugin#over-provisioning-flags).
