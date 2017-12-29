@@ -18,7 +18,7 @@ docker run -p 8080:8080 -p 50000:50000 -v jdata:/var/jenkins_home myjenkins
 
 Construct the list of plugins and versions you want to use in the file `plugins.txt`.
 It is recommended to keep the plugin in alphabetical order for easy record keeping and code review.
-For an existing Jenkins instance, you can obtain its list of installed plugins by running the following Groovy script in its Script Console:
+For an existing Jenkins instance, you can obtain its list of installed plugins by running the following Groovy script in its Script Console (accessed via `Manage Jenkins` > `Script Console`):
 
 ``` groovy Get list of installed plugins
 Jenkins.instance.pluginManager.plugins.sort { it.shortName }.each {
