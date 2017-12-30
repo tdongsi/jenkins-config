@@ -16,6 +16,7 @@ spec:
       containers:
         - name: "jenkins"
           image: "myjenkins:0.1"
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -33,7 +34,7 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/Users/tdongsi/mini/data"
+            path: "/data"
       #nodeSelector:
         #disktype: EBS
 ---

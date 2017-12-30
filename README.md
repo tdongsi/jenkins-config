@@ -118,6 +118,18 @@ If you have problems with minikube’s Docker daemon building your images, you c
 `docker save <image> | minikube ssh docker load` 
 (currently not working due to [this bug](https://github.com/kubernetes/minikube/issues/1957)).
 
+The alternative is to save and load manually:
+
+```text
+tdongsi$ docker save myjenkins:0.1 -o myjenkins.tar
+
+tdongsi$ scp -i $(minikube ssh-key) myjenkins.tar docker@$(minikube ip):/home/docker
+
+tdongsi$ minikube ssh "docker load --input /home/docker/myjenkins.tar"
+a85f35566a26: Loading layer [==================================================>]  196.8MB/196.8MB
+...
+```
+
 #### Troubleshooting: Minikube and VPN
 
 If you are connected to corporate VPN, you might have problem with starting Minikube.
@@ -139,3 +151,42 @@ I have attempted different approaches for this issue, but none are consistently 
 1. Use `--host-only-cidr` option in `minikube start`.
 
 In addition, [this pull request](https://github.com/kubernetes/minikube/pull/1329) supposedly fixes the issue, in v0.19.0 release.
+
+
+#### Deploy Jenkins
+
+Use the pre-defined YAML file.
+
+```text
+tdongsi$ kubectl create -f k8s/jenkins.yaml
+deployment "jenkins" created
+service "jenkins" created
+tdongsi$ kubectl get pods
+NAME                       READY     STATUS    RESTARTS   AGE
+jenkins-7874759567-5pbwv   1/1       Running   0          2s
+
+tdongsi$ minikube service jenkins --url
+http://192.168.99.100:30080
+```
+
+**Troubleshooting**:
+
+You may get the following errors:
+
+```text
+tdongsi$ kubectl get pods
+NAME                       READY     STATUS             RESTARTS   AGE
+jenkins-7874759567-jqkww   0/1       CrashLoopBackOff   1          23s
+
+tdongsi$ kubectl logs jenkins-7874759567-jqkww
+touch: cannot touch ‘/var/jenkins_home/copy_reference_file.log’: Permission denied
+Can not write to /var/jenkins_home/copy_reference_file.log. Wrong volume permissions?
+```
+
+If your hostPath is `/your/home`, it will store the jenkins data in `/your/home` on the host. 
+Ensure that `/your/home` is accessible by the `jenkins` user in container (uid 1000) or use `-u some_other_user` parameter with `docker run`. 
+To fix it, you must set the correct permissions in the host before you mount volumes.
+
+```text
+tdongsi-ltm4:jenkins-dev tdongsi$ minikube ssh sudo chown 1000 /data
+```
