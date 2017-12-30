@@ -34,7 +34,7 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/data"
+            path: "/jdata"
       #nodeSelector:
         #disktype: EBS
 ---

@@ -135,7 +135,7 @@ a85f35566a26: Loading layer [==================================================>
 If you are connected to corporate VPN, you might have problem with starting Minikube.
 
 ```
-tdongsi-ltm4:jenkins-dev tdongsi$ minikube start
+tdongsi$ minikube start
 Starting local Kubernetes v1.8.0 cluster...
 Starting VM...
 Downloading Minikube ISO
@@ -188,5 +188,18 @@ Ensure that `/your/home` is accessible by the `jenkins` user in container (uid 1
 To fix it, you must set the correct permissions in the host before you mount volumes.
 
 ```text
-tdongsi-ltm4:jenkins-dev tdongsi$ minikube ssh sudo chown 1000 /data
+tdongsi$ cd ~
+tdongsi$ mkdir -p minikube/jdata
+
+# In terminal 1
+tdongsi-ltm4:jenkins-dev tdongsi$ minikube mount ~/minikube/jdata:/jdata
+Mounting /Users/tdongsi/minikube/jdata into /jdata on the minikube VM
+This daemon process needs to stay alive for the mount to still be accessible...
+ufs starting
+
+# In terminal 2
+tdongsi$ minikube ssh sudo chown 1000 /jdata
 ```
+
+Note that `/Users/data/path/` is chosen since it is the [only mounted host folder for OSX](https://kubernetes.io/docs/getting-started-guides/minikube/#mounted-host-folders).
+These are not configurable at the moment and different for the driver and OS you are using.
