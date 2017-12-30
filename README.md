@@ -87,14 +87,36 @@ Server Version: version.Info{Major:"1", Minor:"8", GitVersion:"v1.8.0", GitCommi
 GitTreeState:"clean", BuildDate:"2017-11-29T22:43:34Z", GoVersion:"go1.9.1", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
+#### Tips and Tricks
+
 Some good to know commands for minikube:
 
 ```text
+# This will get k8s dashboard URL
 tdongsi$ minikube dashboard --url
 http://192.168.99.100:30000
 
 tdongsi$ minikube service <your_service> --url
+
+# This will allow minikube to reuse local Docker image without uploading
+tdongsi$ eval $(minikube docker-env)
+# The Docker client/context is now switched to minikube's Docker daemon
+tdongsi$ docker images
+REPOSITORY                                             TAG                 IMAGE ID            CREATED             SIZE
+gcr.io/google_containers/kubernetes-dashboard-amd64    v1.8.0              55dbc28356f2        4 weeks ago         119MB
+gcr.io/k8s-minikube/storage-provisioner                v1.8.0              4689081edb10        7 weeks ago         80.8MB
+gcr.io/k8s-minikube/storage-provisioner                v1.8.1              4689081edb10        7 weeks ago         80.8MB
+gcr.io/google_containers/k8s-dns-sidecar-amd64         1.14.5              fed89e8b4248        3 months ago        41.8MB
+gcr.io/google_containers/k8s-dns-kube-dns-amd64        1.14.5              512cd7425a73        3 months ago        49.4MB
+gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64   1.14.5              459944ce8cc4        3 months ago        41.4MB
+gcr.io/google_containers/kubernetes-dashboard-amd64    v1.6.3              691a82db1ecd        5 months ago        139MB
+gcr.io/google-containers/kube-addon-manager            v6.4-beta.2         0a951668696f        6 months ago        79.2MB
+gcr.io/google_containers/pause-amd64                   3.0                 99e59f495ffa        20 months ago       747kB
 ```
+
+If you have problems with minikube’s Docker daemon building your images, you can also copy the image from your local daemon into minikube like this: 
+`docker save <image> | minikube ssh docker load` 
+(currently not working due to [this bug](https://github.com/kubernetes/minikube/issues/1957)).
 
 #### Troubleshooting: Minikube and VPN
 
