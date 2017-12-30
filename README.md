@@ -1,5 +1,6 @@
 # jenkins-config
-Jenkins config as code
+
+Jenkins config as code for local development.
 
 ### How to build and run
 
@@ -52,6 +53,7 @@ See [here](https://support.cloudbees.com/hc/en-us/articles/115000060512-New-agen
 
 ### Local Kubernetes
 
+#### Installing Minikube
 Install `kubectl` and `minikube`, both from [kubernetes on Github](https://github.com/kubernetes/).
 
 ```plain Install minikube
@@ -83,6 +85,15 @@ Client Version: version.Info{Major:"1", Minor:"5", GitVersion:"v1.5.4", GitCommi
 GitTreeState:"clean", BuildDate:"2017-03-07T23:53:09Z", GoVersion:"go1.7.4", Compiler:"gc", Platform:"darwin/amd64"}
 Server Version: version.Info{Major:"1", Minor:"8", GitVersion:"v1.8.0", GitCommit:"0b9efaeb34a2fc51ff8e4d34ad9bc6375459c4a4", 
 GitTreeState:"clean", BuildDate:"2017-11-29T22:43:34Z", GoVersion:"go1.9.1", Compiler:"gc", Platform:"linux/amd64"}
+```
+
+Some good to know commands for minikube:
+
+```text
+tdongsi$ minikube dashboard --url
+http://192.168.99.100:30000
+
+tdongsi$ minikube service <your_service> --url
 ```
 
 #### Troubleshooting: Minikube and VPN

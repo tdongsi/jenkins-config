@@ -1,0 +1,65 @@
+---
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "jenkins"
+  labels:
+    name: "jenkins"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: "jenkins"
+      labels:
+        name: "jenkins"
+    spec:
+      containers:
+        - name: "jenkins"
+          image: "myjenkins:0.1"
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+            - containerPort: 12222
+          volumeMounts:
+            - name: "mdata"
+              mountPath: "/var/jenkins_home"
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+      #imagePullSecrets:
+        #- name: dockerhub
+      volumes:
+        - name: "mdata"
+          hostPath:
+            path: "/Users/tdongsi/mini/data"
+      #nodeSelector:
+        #disktype: EBS
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "jenkins"
+spec:
+  type: "NodePort"
+  selector:
+    name: "jenkins"
+  ports:
+    -
+      name: "http"
+      port: 80
+      targetPort: 8080
+      protocol: "TCP"
+      nodePort: 30080
+    -
+      name: "ssh"
+      port: 12222
+      targetPort: 12222
+      protocol: "TCP"
+      nodePort: 32222
+    -
+      name: "slave"
+      port: 50000
+      protocol: "TCP"
+      nodePort: 31500
