@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: "jenkins"
-          image: "myjenkins:0.1"
-          imagePullPolicy: Never
+          image: "cdongsi/jenkins:test"
+          #imagePullPolicy: Never
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -24,6 +24,8 @@ spec:
           volumeMounts:
             - name: "mdata"
               mountPath: "/var/jenkins_home"
+            - name: "code"
+              mountPath: "/var/jenkins_home/code"
           livenessProbe:
             tcpSocket:
               port: 8080
@@ -34,7 +36,10 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/jdata"
+            path: "/data/jdata"
+        - name: "code"
+          hostPath:
+            path: "/Users/tdongsi/Matrix"
       #nodeSelector:
         #disktype: EBS
 ---

@@ -135,7 +135,7 @@ a85f35566a26: Loading layer [==================================================>
 If you are connected to corporate VPN, you might have problem with starting Minikube.
 
 ```
-tdongsi$ minikube start
+tdongsi$ minikube start --disk-size=50g --kubernetes-version=v1.8.0
 Starting local Kubernetes v1.8.0 cluster...
 Starting VM...
 Downloading Minikube ISO
@@ -192,13 +192,13 @@ tdongsi$ cd ~
 tdongsi$ mkdir -p minikube/jdata
 
 # In terminal 1
-tdongsi-ltm4:jenkins-dev tdongsi$ minikube mount ~/minikube/jdata:/jdata
+tdongsi-ltm4:jenkins-dev tdongsi$ minikube mount ~/minikube/jdata:/data/jdata
 Mounting /Users/tdongsi/minikube/jdata into /jdata on the minikube VM
 This daemon process needs to stay alive for the mount to still be accessible...
 ufs starting
 
 # In terminal 2
-tdongsi$ minikube ssh sudo chown 1000 /jdata
+tdongsi$ minikube ssh sudo chown 1000 /data/jdata
 ```
 
 Note that `/Users/data/path/` is chosen since it is the [only mounted host folder for OSX](https://kubernetes.io/docs/getting-started-guides/minikube/#mounted-host-folders).
