@@ -13,7 +13,7 @@ RUN ln -s /opt/jdk-latest/bin/jar /usr/local/bin/jar
 # A. optimize for resource utilization
 # B. optimize for job throughput
 # We optimize A on the Kubernetes level and B on the Jenkins level, so we provision jenkins nodes aggressively
-ENV JAVA_OPTS "-Dhudson.model.LoadStatistics.decay=0.2 -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85"
+ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false -Dhudson.model.LoadStatistics.decay=0.2 -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85"
 
 USER jenkins
 
