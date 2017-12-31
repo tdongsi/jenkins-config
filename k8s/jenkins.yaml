@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: "jenkins"
-          image: "cdongsi/jenkins:test"
-          #imagePullPolicy: Never
+          image: "cdongsi/jenkins:0.01"
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
             - containerPort: 50000
@@ -36,7 +36,7 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/data/jdata"
+            path: "/data/mydata"
         - name: "code"
           hostPath:
             path: "/Users/tdongsi/Matrix"
