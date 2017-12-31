@@ -38,6 +38,7 @@ durable-task:1.14
 email-ext:2.57.2
 external-monitor-job:1.7
 favorite:2.3.0
+filesystem_scm:2.0
 findbugs:4.71
 git:3.5.1
 git-client:2.5.0

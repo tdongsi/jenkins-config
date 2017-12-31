@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: "jenkins"
-          image: "cdongsi/jenkins:0.01"
+          image: "cdongsi/jenkins:0.02"
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -36,7 +36,8 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/data/mydata"
+            path: "/tempjenkins" # non-persistent
+            # path: "/data/mydata" # persistent in Minikube
         - name: "code"
           hostPath:
             path: "/Users/tdongsi/Matrix"
