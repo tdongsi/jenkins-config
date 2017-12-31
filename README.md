@@ -5,14 +5,10 @@ Jenkins config as code for local development.
 ### How to build and run
 
 ```
-docker build -t myjenkins:latest .
-mkdir jdata
-docker run -p 8080:8080 -p 50000:50000 -v jdata:/var/jenkins_home myjenkins
+docker build -t cdongsi/jenkins:latest .
 
-docker run --rm --name jenkins-local -v mavenrepo:/root/.m2 \
--v ~/Matrix/jenkins-shared-library:/var/jenkins_home/pipeline-library \
--v ~/Matrix/jenkins-global-library:/var/jenkins_home/pipeline-libs \
--e DEV_HOST=127.0.0.1 -p 8080:8080 -p 50000:50000 myjenkins:latest
+docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
+-v /Users/tdongsi/Mycode:/var/jenkins_home/code cdongsi/jenkins:latest
 ```
 
 **Reference**:
@@ -33,7 +29,9 @@ Jenkins.instance.pluginManager.plugins.sort { it.shortName }.each {
 }
 ```
 
-Other methods can be found in [this Stackoverflow thread](https://stackoverflow.com/questions/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair).
+Other methods to get similar list can be found in [this Stackoverflow thread](https://stackoverflow.com/questions/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair).
+The `install-plugins.sh` script and supporting files are already in latest Jenkins's Docker image.
+Otherwise, they can be obtained from [this Github](https://github.com/jenkinsci/docker).
 
 #### Kubernetes plugin
 
@@ -87,9 +85,31 @@ Server Version: version.Info{Major:"1", Minor:"8", GitVersion:"v1.8.0", GitCommi
 GitTreeState:"clean", BuildDate:"2017-11-29T22:43:34Z", GoVersion:"go1.9.1", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
+##### Troubleshooting: Minikube and VPN
+
+If you are connected to corporate VPN, you might have problem with starting Minikube.
+
+```
+tdongsi$ minikube start --disk-size=50g --kubernetes-version=v1.8.0
+Starting local Kubernetes v1.8.0 cluster...
+Starting VM...
+Downloading Minikube ISO
+ 140.01 MB / 140.01 MB [============================================] 100.00% 0s
+
+^C
+```
+
+I have attempted different approaches for this issue, but none are consistently working.
+
+1. Use OpenConnect for VPN access rather than Cisco's AnyConnect client.
+1. Set port forwarding for the minikube VM to forward port 8443 on 127.0.0.1 to port 8443 in the VM.
+1. Use `--host-only-cidr` option in `minikube start`.
+
+In addition, [this pull request](https://github.com/kubernetes/minikube/pull/1329) supposedly fixes the issue, in v0.19.0 release.
+
 #### Tips and Tricks
 
-Some good to know commands for minikube:
+Some good-to-know commands for minikube:
 
 ```text
 # This will get k8s dashboard URL
@@ -130,29 +150,6 @@ a85f35566a26: Loading layer [==================================================>
 ...
 ```
 
-#### Troubleshooting: Minikube and VPN
-
-If you are connected to corporate VPN, you might have problem with starting Minikube.
-
-```
-tdongsi$ minikube start --disk-size=50g --kubernetes-version=v1.8.0
-Starting local Kubernetes v1.8.0 cluster...
-Starting VM...
-Downloading Minikube ISO
- 140.01 MB / 140.01 MB [============================================] 100.00% 0s
-
-^C
-```
-
-I have attempted different approaches for this issue, but none are consistently working.
-
-1. Use OpenConnect for VPN access rather than Cisco's AnyConnect client.
-1. Set port forwarding for the minikube VM to forward port 8443 on 127.0.0.1 to port 8443 in the VM.
-1. Use `--host-only-cidr` option in `minikube start`.
-
-In addition, [this pull request](https://github.com/kubernetes/minikube/pull/1329) supposedly fixes the issue, in v0.19.0 release.
-
-
 #### Deploy Jenkins
 
 Use the pre-defined YAML file.
@@ -168,6 +165,13 @@ jenkins-7874759567-5pbwv   1/1       Running   0          2s
 tdongsi$ minikube service jenkins --url
 http://192.168.99.100:30080
 ```
+
+Note that the volumes are specifically defined in `jenkins.yaml` to map `JENKINS_HOME` to `/data/mydata`
+and `JENKINS_HOME/code` to `/Users/tdongsi/Mycode`.
+Such mapping is not coincidental and one must know before modifying to fit his setup.
+Specifically, `/data/...` is chosen for `JENKINS_HOME` since it is one of few [persistent folders in Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/#persistent-volumes). 
+`/Users/tdongsi/...` is chosen since it is the [only mounted host folder for OSX](https://kubernetes.io/docs/getting-started-guides/minikube/#mounted-host-folders).
+These are not configurable at the moment and different for the driver and OS you are using.
 
 **Troubleshooting**:
 
@@ -188,18 +192,8 @@ Ensure that `/your/home` is accessible by the `jenkins` user in container (uid 1
 To fix it, you must set the correct permissions in the host before you mount volumes.
 
 ```text
-tdongsi$ cd ~
-tdongsi$ mkdir -p minikube/jdata
-
-# In terminal 1
-tdongsi-ltm4:jenkins-dev tdongsi$ minikube mount ~/minikube/jdata:/data/jdata
-Mounting /Users/tdongsi/minikube/jdata into /jdata on the minikube VM
-This daemon process needs to stay alive for the mount to still be accessible...
-ufs starting
-
-# In terminal 2
-tdongsi$ minikube ssh sudo chown 1000 /data/jdata
+tdongsi$ minikube ssh sudo chown 1000 /data/mydata
 ```
 
-Note that `/Users/data/path/` is chosen since it is the [only mounted host folder for OSX](https://kubernetes.io/docs/getting-started-guides/minikube/#mounted-host-folders).
-These are not configurable at the moment and different for the driver and OS you are using.
+Note that since `JENKINS_HOME` is intentionally persistent in the default setup, remember to clear the `/data` folder or 
+change volume mapping when working on Docker image.
