@@ -5,6 +5,7 @@ import jenkins.model.Jenkins
 import hudson.model.*
 import com.cloudbees.plugins.credentials.CredentialsProvider
 import hudson.PluginManager
+import org.jenkinsci.plugins.workflow.cps.replay.ReplayAction
 
 println("=== Installing the Security Realm")
 def instance = Jenkins.getInstance()
@@ -66,6 +67,7 @@ if ( !isGranularityNeeded ) {
 
     //  Run Permissions
     strategy.add(hudson.model.Run.DELETE,USER)
+    strategy.add(org.jenkinsci.plugins.workflow.cps.replay.ReplayAction.REPLAY,USER)
     strategy.add(hudson.model.Run.UPDATE,USER)
 
     //  View Permissions
