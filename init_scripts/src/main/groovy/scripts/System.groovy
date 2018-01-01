@@ -1,18 +1,17 @@
 import hudson.security.csrf.DefaultCrumbIssuer
 import jenkins.model.Jenkins
 import jenkins.model.JenkinsLocationConfiguration
-import jenkins.CLI
 import jenkins.security.s2m.AdminWhitelistRule
 import org.kohsuke.stapler.StaplerProxy
 import hudson.tasks.Mailer
-import hudson.plugins.locale.PluginImpl
 
 println("-- System configuration")
-
-// TODO: Configure Job Restrictions, Script Security, Authorize Project, etc., etc.
 println("--- Configuring Remoting (JNLP4 only, no Remoting CLI)")
-CLI.get().enabled = false
+// NOTE: this only works with Jenkins 2.46.2 and later
+// Jenkins.instance.getDescriptor("jenkins.CLI").get().setEnabled(false)
 Jenkins.instance.agentProtocols = new HashSet<String>(["JNLP4-connect"])
+
+println("--- Enable Slave -> Master Access Control")
 Jenkins.instance.getExtensionList(StaplerProxy.class)
     .get(AdminWhitelistRule.class)
     .masterKillSwitch = false
@@ -26,13 +25,8 @@ if (Jenkins.instance.crumbIssuer == null) {
 println("--- Configuring Quiet Period")
 // We do not wait for anything
 Jenkins.instance.quietPeriod = 0
+Jenkins.instance.save()
 
 println("--- Configuring Email global settings")
 JenkinsLocationConfiguration.get().adminAddress = "admin@non.existent.email"
 Mailer.descriptor().defaultSuffix = "@non.existent.email"
-
-println("--- Configuring Locale")
-//TODO: Create ticket to get better API
-PluginImpl localePlugin = (PluginImpl)Jenkins.instance.getPlugin("locale")
-localePlugin.systemLocale = "en_US"
-localePlugin.@ignoreAcceptLanguage=true
