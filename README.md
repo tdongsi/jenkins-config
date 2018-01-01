@@ -99,13 +99,8 @@ Downloading Minikube ISO
 ^C
 ```
 
-I have attempted different approaches for this issue, but none are consistently working.
-
-1. Use OpenConnect for VPN access rather than Cisco's AnyConnect client.
-1. Set port forwarding for the minikube VM to forward port 8443 on 127.0.0.1 to port 8443 in the VM.
-1. Use `--host-only-cidr` option in `minikube start`.
-
-In addition, [this pull request](https://github.com/kubernetes/minikube/pull/1329) supposedly fixes the issue, in v0.19.0 release.
+In that case you may have to set up port forwarding for minikube VM.
+See [this blog post](http://tdongsi.github.io/blog/2017/12/31/minikube-in-corporate-vpn/) for full discussions.
 
 #### Tips and Tricks
 
