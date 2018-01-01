@@ -5,7 +5,7 @@ import jenkins.security.s2m.AdminWhitelistRule
 import org.kohsuke.stapler.StaplerProxy
 import hudson.tasks.Mailer
 
-println("-- Basic Jenkins hardening")
+println("-- Basic Jenkins security")
 println("--- Configuring Remoting (JNLP4 only, no Remoting CLI)")
 // NOTE: this only works with Jenkins 2.46.2 and later
 // Jenkins.instance.getDescriptor("jenkins.CLI").get().setEnabled(false)

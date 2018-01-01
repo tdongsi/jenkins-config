@@ -192,3 +192,37 @@ tdongsi$ minikube ssh sudo chown 1000 /data/mydata
 
 Note that since `JENKINS_HOME` is intentionally persistent in the default setup, remember to clear the `/data` folder or 
 change volume mapping when working on Docker image.
+
+
+#### Configure Kubernetes plugin
+
+The Minikube client certificate needs to be converted to PKCS, will need a password
+
+```text
+tdongsi$ openssl pkcs12 -export -out ~/Downloads/minikube.pfx -inkey ~/.minikube/apiserver.key -in ~/.minikube/apiserver.crt -certfile ~/.minikube/ca.crt -passout pass:secret
+```
+
+Validate that the certificates work
+
+```text
+tdongsi$ curl --cacert ~/.minikube/ca.crt --cert ~/Downloads/minikube.pfx:secret https://192.168.99.100:8443
+{
+  "paths": [
+    "/api",
+    "/api/v1",
+    "/apis",
+    "/apis/",
+    "/apis/admissionregistration.k8s.io",
+    ...
+}
+```
+
+Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/minikube.pfx`, password `secret`.
+
+* Kubernetes URL: `https://192.168.99.100:8443` where `192.168.99.100` is output of `minikube ip` and `https://`(or `http://` or different port number depending on setup) is required.  
+* Fill *Kubernetes server certificate key* with the contents of `~/.minikube/ca.crt`, after removing `-----BEGIN CERTIFICATE-----`
+ and `-----END CERTIFICATE-----` lines.
+* Disable https certificate check: Check if you use `http` in Kubernetes URL.
+* Credentials: Use the one that you just created with `minikube.pfx` file.
+* Use *Test Connection* button to verify your Kubernetes configuration.
+* Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output.
