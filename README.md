@@ -16,6 +16,10 @@ docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
 * [Base Docker image](https://hub.docker.com/r/jenkins/jenkins/)
 * [Usage instruction](https://hub.docker.com/_/jenkins/). Note that the image is deprecated.
 
+#### Jenkins configuration
+
+TODO: Groovy hooks.
+
 ### Installing plugins
 
 Construct the list of plugins and versions you want to use in the file `plugins.txt`.
@@ -61,7 +65,7 @@ tdongsi$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.2
                                  Dload  Upload   Total   Spent    Left  Speed
 100 39.3M  100 39.3M    0     0  5401k      0  0:00:07  0:00:07 --:--:-- 7069k
 
-tdongsi$ minikube start
+tdongsi$ minikube start --disk-size=50g --memory 4096 --kubernetes-version=v1.8.0
 Starting local Kubernetes v1.8.0 cluster...
 Starting VM...
 Downloading Minikube ISO
@@ -90,7 +94,7 @@ GitTreeState:"clean", BuildDate:"2017-11-29T22:43:34Z", GoVersion:"go1.9.1", Com
 If you are connected to corporate VPN, you might have problem with starting Minikube.
 
 ```
-tdongsi$ minikube start --disk-size=50g --kubernetes-version=v1.8.0
+tdongsi$ minikube start --disk-size=50g --memory 4096 --kubernetes-version=v1.8.0
 Starting local Kubernetes v1.8.0 cluster...
 Starting VM...
 Downloading Minikube ISO
@@ -226,3 +230,13 @@ Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/mini
 * Credentials: Use the one that you just created with `minikube.pfx` file.
 * Use *Test Connection* button to verify your Kubernetes configuration.
 * Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output.
+
+#### Update configuration in live Jenkins instance
+
+The default configurations of Jenkins are defined in Groovy hook scripts as explained above.
+It helps removing many manual steps whenever starting a new local Jenkins instance for testing.
+However, once you already deploy Jenkins into Minikube and start developing, it is best to keep that Jenkins instance running and persist any current jobs or changes.
+The volumes defined in `jenkins.yaml` file is intended to be persistent in Minikube and all the changes are saved automatically.
+
+However, on the occasions that changes in the Groovy hook scripts are required, please update the Groovy scripts and the live Jenkins instance. 
+The easiest way to update the Jenkins instance is to run the updated Groovy commands in Script Console (access via Mange Jenkins > Script Console). 
