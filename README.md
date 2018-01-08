@@ -1,6 +1,6 @@
 # jenkins-config
 
-Jenkins config as code for local development.
+Jenkins config as code for local development of Groovy-based Pipeline libraries.
 
 ### How to build and run
 
@@ -231,6 +231,8 @@ Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/mini
 * Use *Test Connection* button to verify your Kubernetes configuration.
 * Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output.
 
+TODO: How to test if it works. Simple job with java-agent.
+
 #### Update configuration in live Jenkins instance
 
 The default configurations of Jenkins are defined in Groovy hook scripts as explained above.
@@ -240,3 +242,9 @@ The volumes defined in `jenkins.yaml` file is intended to be persistent in Minik
 
 However, on the occasions that changes in the Groovy hook scripts are required, please update the Groovy scripts and the live Jenkins instance. 
 The easiest way to update the Jenkins instance is to run the updated Groovy commands in Script Console (access via Mange Jenkins > Script Console). 
+
+#### Configure global pipeline libraries
+
+internally hosted: workflowLibs. Symlink.
+
+externally hosted: Legacy SCM > File System.
