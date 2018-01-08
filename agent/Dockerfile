@@ -2,6 +2,7 @@
 MAINTAINER dongsi.tuecuong@gmail.com
 LABEL Description="This image provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="3.10"
 
+USER root
 ENV HOME /home/jenkins
 RUN groupadd -g 10000 jenkins &&\
     useradd -c "Jenkins user" -d $HOME -u 10000 -g 10000 -m jenkins
@@ -10,8 +11,9 @@ RUN groupadd -g 10000 jenkins &&\
 # NOTE: Avoid keeping tgz file around
 COPY docker /usr/local/docker
 
-RUN groupadd -g 992 docker &&\
-    usermod -G docker jenkins
+RUN groupadd -g 1001 docker &&\
+    usermod -G docker jenkins &&\
+    ln -s /usr/local/docker/docker /usr/bin/docker
 
 ARG VERSION=3.10
 ARG AGENT_WORKDIR=/home/jenkins/agent
