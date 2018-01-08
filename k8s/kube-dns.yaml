@@ -1,4 +1,8 @@
 # Based on https://github.com/romana/kubernetes-ha
+# Usage note: kubelet may need to be restarted after deploying.
+# From doc: https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
+# "The DNS pod is exposed as a Kubernetes Service with a static IP.
+# Once assigned the kubelet passes DNS configured using the --cluster-dns=10.0.0.10 flag to each container."
 apiVersion: v1
 kind: ConfigMap
 metadata:

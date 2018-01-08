@@ -1,0 +1,4 @@
+# Based on https://github.com/kubernetes/heapster/tree/master/deploy/kube-config/influxdb
+# Alternative: https://github.com/kubernetes/heapster/tree/master/deploy/kube-config/standalone
+# For metrics in k8s dashboard.
+
