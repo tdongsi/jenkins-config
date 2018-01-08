@@ -4,8 +4,13 @@ This Docker image provides the Jenkins agent for running with Kubernetes plugin.
 
 ### Build and usage
 
-A few tools are pre-installed in the Docker image to fit my need.
-For these tools, the followings are expected in the same folder with `Dockerfile`.
+```text
+docker build -t cdongsi/jenkins-agent:latest .
+```
+
+A few tools can be pre-installed in the Docker image to fit my personal development need.
+For these tools, detailed instructions are in the following sections.
+Files for these additional tools are expected in the same folder with `Dockerfile`.
 
 NOTE: In production, depending on the context, you might be better off to have smaller Docker images with fewer tools pre-installed.
 For example, you may have `python-agent` image that only has Python-related binaries and `java-agent` image that only has Java-related binaries.
@@ -13,16 +18,57 @@ However, for local development, it is more *convenient* to have all tools availa
 
 #### Docker
 
-* `docker` folder contains Docker binaries, extracted from `docker-17.03.0-ce.tgz` which is downloaded from Docker website.
-  * `docker` binaries are needed in Jenkins jobs that build Docker images.
+Docker is needed in Jenkins jobs that build Docker images.
+Docker binaries are added into Jenkins agent image by the following section of code:
+
+```dockerfile
+# Files in docker folder is extracted from docker-17.03.0-ce.tgz
+# NOTE: Avoid keeping tgz file around
+COPY docker /usr/local/docker
+
+RUN groupadd -g 1001 docker &&\
+    usermod -G docker jenkins &&\
+    ln -s /usr/local/docker/docker /usr/bin/docker
+```
+
+`docker` folder contains Docker binaries, extracted from `docker-17.03.0-ce.tgz` which is downloaded from Docker website.
   
-NOTE2: We build Docker images from a Jenkins agent which is another Docker container in this setup (Jenkins master and agents are containers in Kubernetes).
-There are two paradigms for building Docker images in a Docker container: Docker-in-Docker (DIND) and Docker-out-of-Docker (DOOD).
-IMO, I would choose DOOD for CI systems, agreeing with [DIND creator himself in this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
+NOTE: We build Docker images from a Jenkins agent which is another Docker container in this setup (Jenkins master and agents are containers in Kubernetes).
+There are two paradigms for building Docker images in a Docker container: Docker-in-Docker (DIND) and Docker-out-of-Docker (DOOD) ([more discussion](http://tdongsi.github.io/blog/2017/04/23/docker-out-of-docker/)).
+The general recommendation is that DOOD is better fit for CI systems, including [DIND creator himself in this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
 ### Testing the Docker image
 
-TODO
+To verify the Docker image working, configure Kubernetes plugin to add a Pod template with correct image tag and assign 
+an appropriate label to it (e.g., `java-agent`).
+
+Add a Jenkinsfile for a test job such as follows:
+
+```groovy
+// Test library setup
+library 'jenkins-shared-library@master'
+
+node('java-agent') {
+    stage('Checkout') {
+        checkout scm
+    }
+    
+    stage('Main') {
+        // Test Python setup
+        sh(script: 'python -c "import requests"', returnStatus: true)
+        // Test Docker setup
+        sh 'docker version'
+    }
+    
+    stage('Post') {
+        // Print info of standard tools
+        sh 'ls -al'
+        sh 'java -version'
+        sh 'mvn -version'
+        sh 'python -V'
+    }
+}
+```
 
 ### Troubleshooting
 
