@@ -231,7 +231,8 @@ Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/mini
 * Use *Test Connection* button to verify your Kubernetes configuration.
 * Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output.
 
-TODO: How to test if it works. Simple job with java-agent.
+To verify if the plugin is configured correctly and the Kubernetes backend is functional, configure a pod template for slave agents and create a simple test job.
+See [this](agent/README.md) for how to build a slave agent's Docker image and an example job.
 
 #### Update configuration in live Jenkins instance
 
@@ -245,6 +246,9 @@ The easiest way to update the Jenkins instance is to run the updated Groovy comm
 
 #### Configure global pipeline libraries
 
+TODO:
 internally hosted: workflowLibs. Symlink.
 
 externally hosted: Legacy SCM > File System.
+
+Overriding built-in Pipeline steps: use [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
