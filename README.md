@@ -252,3 +252,12 @@ internally hosted: workflowLibs. Symlink.
 externally hosted: Legacy SCM > File System.
 
 Overriding built-in Pipeline steps: use [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
+
+### Setup IntelliJ IDEA for local development
+
+
+
+#### References
+
+* [Working with Groovy Init Scripts](https://www.bonusbits.com/wiki/HowTo:Setup_Project_in_IntellJ_IDEA_for_Working_with_Jenkins_Plugins_Groovy_Init_Scripts)
+* [Working with Pipeline libraries](https://st-g.de/2016/08/jenkins-pipeline-autocompletion-in-intellij)
