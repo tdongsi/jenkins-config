@@ -20,6 +20,7 @@ import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.CredentialsScope
 import hudson.util.Secret
+import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
 
 // Based on https://youtu.be/RzWkn_ENVcc?t=2263
 def domain = Domain.global()
@@ -38,3 +39,14 @@ def secretString = new StringCredentialsImpl(
 
 store.addCredentials(domain, githubAccount)
 store.addCredentials(domain, secretString)
+
+String keyfile = "/var/jenkins_home/.ssh/id_rsa"
+// https://github.com/jenkinsci/ssh-credentials-plugin/blob/master/src/main/java/com/cloudbees/jenkins/plugins/sshcredentials/impl/BasicSSHUserPrivateKey.java#L103-L106
+def privateKey = new BasicSSHUserPrivateKey(
+        CredentialsScope.GLOBAL,
+        "jenkins_ssh_key", // id
+        "git", // username
+        new BasicSSHUserPrivateKey.FileOnMasterPrivateKeySource(keyfile), // upload private key file
+        "", // passphrase
+        "") // description
+store.addCredentials(domain, privateKey)

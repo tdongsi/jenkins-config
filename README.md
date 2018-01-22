@@ -255,7 +255,8 @@ For that, we should consider configuring the following Jenkins shared libraries 
  
 1. Configure Global Pipeline Libraries for a custom Mock Step Library, such as [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
   This is for overriding built-in Pipeline steps such as `mail` or `sendSlack` in local development.
-2. Create symlink to mimic internally hosted shared library at workflowLibs.
+2. Create symlink to mimic [internally hosted shared library at workflowLibs](http://tdongsi.github.io/blog/2017/03/17/jenkins-pipeline-shared-libraries/): 
+   `ln -s /var/jenkins_home/code/internal-global-library/vars /var/jenkins_home/workflow-libs/vars`.
 3. Finally, configure Pipeline Libraries at the Folder level for the remaining Jenkins shared libraries.
    
 Note that using retrieval option with "Legacy SCM > File System" only allows one location at a time.
