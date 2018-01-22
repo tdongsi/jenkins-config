@@ -37,6 +37,37 @@ NOTE: We build Docker images from a Jenkins agent which is another Docker contai
 There are two paradigms for building Docker images in a Docker container: Docker-in-Docker (DIND) and Docker-out-of-Docker (DOOD) ([more discussion](http://tdongsi.github.io/blog/2017/04/23/docker-out-of-docker/)).
 The general recommendation is that DOOD is better fit for CI systems, including [DIND creator himself in this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
+#### Python
+
+The base image `maven:3.5-jdk-8` is based on Debian 9.
+
+```text
+$ cat /etc/issue
+Debian GNU/Linux 9 \n \l
+
+$ cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux 9 (stretch)"
+NAME="Debian GNU/Linux"
+VERSION_ID="9"
+VERSION="9 (stretch)"
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+```
+
+Therefore, you can install different Python packages by first installing `python-pip` as follows and use `pip install`.
+
+```dockerfile
+# Install Debian packages
+RUN apt-get update &&\
+    apt-get install -y python-pip
+
+# Install Python packages
+RUN pip install --upgrade pip &&\
+    pip install requests
+```
+
 ### Testing the Docker image
 
 To verify the Docker image working, configure Kubernetes plugin to add a Pod template with correct image tag and assign 

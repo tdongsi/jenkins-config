@@ -260,6 +260,7 @@ For that, we should consider configuring the following Jenkins shared libraries 
    
 Note that using retrieval option with "Legacy SCM > File System" only allows one location at a time.
 If your Pipeline Libraries in production comes from more than one source (e.g., two Github repositories), then you have to configure the remaining with similar retrieval option (e.g., Modern SCM > Github).
+For verifying correctness of library configurations, you can use the same test Jenkinsfile in [this folder](agent/README.md).
 
 ### Setup IntelliJ IDEA for local development
 
