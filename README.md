@@ -254,7 +254,7 @@ For developing Jenkinsfile or shared libraries, we would want to mimic the confi
 For that, we should consider configuring the following Jenkins shared libraries in the following particular order:
  
 1. Configure Global Pipeline Libraries for a custom Mock Step Library, such as [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
-  This is for overriding built-in Pipeline steps such as `checkout` or `email` in local development.
+  This is for overriding built-in Pipeline steps such as `mail` or `sendSlack` in local development.
 2. Create symlink to mimic internally hosted shared library at workflowLibs.
 3. Finally, configure Pipeline Libraries at the Folder level for the remaining Jenkins shared libraries.
    

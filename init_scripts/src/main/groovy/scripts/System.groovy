@@ -26,6 +26,17 @@ if (Jenkins.instance.crumbIssuer == null) {
 println("--- Configuring Quiet Period")
 // We do not wait for anything
 Jenkins.instance.quietPeriod = 0
+
+println("--- Set Maven Project Configuration")
+Jenkins.instance.setNumExecutors(1)
+Jenkins.instance.setMode(Node.Mode.EXCLUSIVE)
+
+println("--- Set fixed SSHD port")
+def sshDesc = Jenkins.instance.getDescriptor("org.jenkinsci.main.modules.sshd.SSHD")
+sshDesc.setPort(12222)
+sshDesc.save()
+
+// Save them all
 Jenkins.instance.save()
 
 println("--- Configuring Email global settings")
