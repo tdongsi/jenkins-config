@@ -29,7 +29,7 @@ Jenkins.instance.quietPeriod = 0
 
 println("--- Set Maven Project Configuration")
 Jenkins.instance.setNumExecutors(1)
-Jenkins.instance.setMode(Node.Mode.EXCLUSIVE)
+Jenkins.instance.setMode(hudson.model.Node.Mode.EXCLUSIVE)
 
 println("--- Set fixed SSHD port")
 def sshDesc = Jenkins.instance.getDescriptor("org.jenkinsci.main.modules.sshd.SSHD")

@@ -19,6 +19,7 @@ import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
 import com.cloudbees.plugins.credentials.domains.Domain
 import com.cloudbees.plugins.credentials.CredentialsScope
+import jenkins.model.Jenkins
 import hudson.util.Secret
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
 
