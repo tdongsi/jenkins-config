@@ -167,7 +167,7 @@ http://192.168.99.100:30080
 
 Note that the volumes are specifically defined in `jenkins.yaml` to map `JENKINS_HOME` to `/data/mydata`
 and `JENKINS_HOME/code` to `/Users/tdongsi/Mycode`.
-Such mapping is not coincidental and one must know before modifying to fit his setup.
+Such mapping is NOT coincidental and one should NOT modify such setup unless he understands what he's doing.
 Specifically, `/data/...` is chosen for `JENKINS_HOME` since it is one of few [persistent folders in Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/#persistent-volumes). 
 `/Users/tdongsi/...` is chosen since it is the [only mounted host folder for OSX](https://kubernetes.io/docs/getting-started-guides/minikube/#mounted-host-folders).
 These are not configurable at the moment and different for the driver and OS you are using.
@@ -244,20 +244,29 @@ The volumes defined in `jenkins.yaml` file is intended to be persistent in Minik
 However, on the occasions that changes in the Groovy hook scripts are required, please update the Groovy scripts and the live Jenkins instance. 
 The easiest way to update the Jenkins instance is to run the updated Groovy commands in Script Console (access via Mange Jenkins > Script Console). 
 
-#### Configure global pipeline libraries
+#### Configure shared pipeline libraries
 
-TODO:
-internally hosted: workflowLibs. Symlink.
+Jenkins shared libraries is the most common and preferred ways to share commonly used Groovy codes in Jenkinsfile.
+Jenkins systems in production may use different combinations of Jenkins shared libraries.
+[This presentation](https://www.youtube.com/watch?v=M8U9RyL756U) is one of the most thorough reviews of different ways of deploying shared libraries in Jenkins.
 
-externally hosted: Legacy SCM > File System.
-
-Overriding built-in Pipeline steps: use [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
+For developing Jenkinsfile or shared libraries, we would want to mimic the configurations of shared Jenkins libraries in production.
+For that, we should consider configuring the following Jenkins shared libraries in the following particular order:
+ 
+1. Configure Global Pipeline Libraries for a custom Mock Step Library, such as [this setup](https://github.com/tdongsi/jenkins-steps-override/blob/master/README.md).
+  This is for overriding built-in Pipeline steps such as `checkout` or `email` in local development.
+2. Create symlink to mimic internally hosted shared library at workflowLibs.
+3. Finally, configure Pipeline Libraries at the Folder level for the remaining Jenkins shared libraries.
+   
+Note that using retrieval option with "Legacy SCM > File System" only allows one location at a time.
+If your Pipeline Libraries in production comes from more than one source (e.g., two Github repositories), then you have to configure the remaining with similar retrieval option (e.g., Modern SCM > Github).
 
 ### Setup IntelliJ IDEA for local development
 
+TODO
 
-
-#### References
+### References
 
 * [Working with Groovy Init Scripts](https://www.bonusbits.com/wiki/HowTo:Setup_Project_in_IntellJ_IDEA_for_Working_with_Jenkins_Plugins_Groovy_Init_Scripts)
 * [Working with Pipeline libraries](https://st-g.de/2016/08/jenkins-pipeline-autocompletion-in-intellij)
+* [Different setups of Jenkins shared libraries](https://www.youtube.com/watch?v=M8U9RyL756U)
