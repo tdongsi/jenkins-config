@@ -244,7 +244,7 @@ The volumes defined in `jenkins.yaml` file is intended to be persistent in Minik
 However, on the occasions that changes in the Groovy hook scripts are required, please update the Groovy scripts and the live Jenkins instance. 
 The easiest way to update the Jenkins instance is to run the updated Groovy commands in Script Console (access via Mange Jenkins > Script Console). 
 
-#### Configure shared pipeline libraries
+### Configure shared pipeline libraries
 
 Jenkins shared libraries is the most common and preferred ways to share commonly used Groovy codes in Jenkinsfile.
 Jenkins systems in production may use different combinations of Jenkins shared libraries.
@@ -272,3 +272,8 @@ TODO
 * [Working with Groovy Init Scripts](https://www.bonusbits.com/wiki/HowTo:Setup_Project_in_IntellJ_IDEA_for_Working_with_Jenkins_Plugins_Groovy_Init_Scripts)
 * [Working with Pipeline libraries](https://st-g.de/2016/08/jenkins-pipeline-autocompletion-in-intellij)
 * [Different setups of Jenkins shared libraries](https://www.youtube.com/watch?v=M8U9RyL756U)
+
+### Related projects
+
+* [Jenkins agent](agent/README.md) including test Jenkinsfile.
+* [Mock Pipeline Steps library](https://github.com/tdongsi/jenkins-steps-override)
