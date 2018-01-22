@@ -1,11 +1,9 @@
 // Initializes the Development folder, which is fully configurable by the user
 
 import groovy.io.FileType
-import com.synopsys.arc.jenkins.plugins.ownership.OwnershipDescription
 import hudson.plugins.filesystem_scm.FSSCM
 import jenkins.model.Jenkins
 import com.cloudbees.hudson.plugins.folder.Folder
-import org.jenkinsci.plugins.ownership.model.folders.FolderOwnershipHelper
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
 import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
@@ -21,27 +19,23 @@ if (Jenkins.instance.getItem("Development") != null) {
 
 // Admin owns the root Development folder
 def folder = Jenkins.instance.createProject(Folder.class, "Development")
-FolderOwnershipHelper.setOwnership(folder, new OwnershipDescription(true, "admin"))
-
-// Users get their own sandboxes
-def folder2 = folder.createProject(Folder.class, "User")
-FolderOwnershipHelper.setOwnership(folder2, new OwnershipDescription(true, "user"))
+// FolderOwnershipHelper.setOwnership(folder, new OwnershipDescription(true, "admin"))
 
 // Create a library for local Jenkins Pipeline Library Development
-// if the Env Var is set and the directory is mapped
 println("==== Initializing local Pipeline Library development dir")
-File file = new File("/var/jenkins_home/pipeline-library/vars")
+String libraryPath = '/var/jenkins_home/code/jenkins-shared-library'
+File file = new File("${libraryPath}/vars")
 if (!file.exists()) {
-    println("/var/jenkins_home/pipeline-library is not mapped, skipping")
+    println("${libraryPath} is not found, skipping")
     return
 } else {
-    println("/var/jenkins_home/pipeline-library is mapped, initializing the directory")
+    println("${libraryPath} is found, initializing the directory")
 }
 
-def pipelineLib = folder.createProject(Folder.class, "PipelineLibrary")
-FolderOwnershipHelper.setOwnership(pipelineLib, new OwnershipDescription(true, "user"))
-def scm = new FSSCM("/var/jenkins_home/pipeline-library", false, false, null)
-LibraryConfiguration lc = new LibraryConfiguration("pipeline-library", new SCMRetriever(scm))
+def pipelineLib = folder.createProject(Folder.class, "jenkins-shared-library")
+// FolderOwnershipHelper.setOwnership(pipelineLib, new OwnershipDescription(true, "user"))
+def scm = new FSSCM(libraryPath, false, false, null)
+LibraryConfiguration lc = new LibraryConfiguration("jenkins-shared-library", new SCMRetriever(scm))
 lc.with {
     implicit = true
     defaultVersion = "master"
