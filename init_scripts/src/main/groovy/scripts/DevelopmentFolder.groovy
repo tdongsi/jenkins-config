@@ -5,7 +5,6 @@ import hudson.plugins.filesystem_scm.FSSCM
 import jenkins.model.Jenkins
 import com.cloudbees.hudson.plugins.folder.Folder
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
-import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
 import org.jenkinsci.plugins.workflow.libs.FolderLibraries
 import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
@@ -16,8 +15,8 @@ if (Jenkins.instance.getItem("Development") != null) {
     println("Development folder has been already initialized, skipping the step")
     return
 }
-def pipelineLib = Jenkins.instance.createProject(Folder.class, "Development")
-// FolderOwnershipHelper.setOwnership(pipelineLib, new OwnershipDescription(true, "user"))
+def folder = Jenkins.instance.createProject(Folder.class, "Development")
+// FolderOwnershipHelper.setOwnership(folder, new OwnershipDescription(true, "user"))
 
 // Create a library for local Jenkins Pipeline Library Development
 println("==== Initializing local Pipeline Library development dir")
@@ -39,7 +38,7 @@ lc.with {
     implicit = true
     defaultVersion = "master"
 }
-pipelineLib.addProperty(new FolderLibraries([lc]))
+folder.addProperty(new FolderLibraries([lc]))
 
 // Add extra Pipeline libs
 CODE_BASE = '/var/jenkins_home/code/'

@@ -31,3 +31,4 @@ VOLUME /var/jenkins_home/code
 COPY init_scripts/src/main/groovy/scripts/Auth.groovy /usr/share/jenkins/ref/init.groovy.d/Auth.groovy
 COPY init_scripts/src/main/groovy/scripts/System.groovy /usr/share/jenkins/ref/init.groovy.d/System.groovy
 COPY init_scripts/src/main/groovy/scripts/Credentials.groovy /usr/share/jenkins/ref/init.groovy.d/Credentials.groovy
+COPY init_scripts/src/main/groovy/scripts/DevelopmentFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevelopmentFolder.groovy
