@@ -9,6 +9,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob
 import org.jenkinsci.plugins.workflow.libs.FolderLibraries
 import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
 import org.jenkinsci.plugins.workflow.libs.SCMRetriever
+import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
 
 println("=== Initialize the Development folder")
 if (Jenkins.instance.getItem("Development") != null) {
@@ -32,7 +33,7 @@ if (!file.exists()) {
 }
 
 
-def scm = new FSSCM(libraryPath, false, false, null)
+def scm = new FSSCM(libraryPath, false, false, null) // parameters: path, clearWorkspace, copyHidden, filterSettings
 LibraryConfiguration lc = new LibraryConfiguration(libraryRepo, new SCMRetriever(scm))
 lc.with {
     implicit = true
@@ -40,8 +41,7 @@ lc.with {
 }
 folder.addProperty(new FolderLibraries([lc]))
 
-// Add extra Pipeline libs
-CODE_BASE = '/var/jenkins_home/code/'
+// Add a job for each repo in CODE_BASE
 def pipelineDir = new File(CODE_BASE)
 if (pipelineDir.exists()) {
     println("== Adding local pipelines")
@@ -52,7 +52,8 @@ if (pipelineDir.exists()) {
             println("===== Adding ${pipelineName}")
 
             WorkflowJob job = folder.createProject(WorkflowJob.class, pipelineName)
-            job.definition = new CpsFlowDefinition(jenkinsFile.text, false) // Do not use sandbox
+            def jobScm = new FSSCM(myPath, false, false, null)
+            job.definition = new CpsScmFlowDefinition(jobScm, 'Jenkinsfile')
         }
     }
 }
