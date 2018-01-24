@@ -99,3 +99,5 @@ lrwxrwxrwx 1 jenkins jenkins 50 Jan 24 02:55 vars -> /var/jenkins_home/code/jenk
 
 ### References
 
+* [Full instructions](README.md)
+* [Docker agent](agent/README.md)

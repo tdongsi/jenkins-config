@@ -15,10 +15,13 @@ docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
 
 * [Base Docker image](https://hub.docker.com/r/jenkins/jenkins/)
 * [Usage instruction](https://hub.docker.com/_/jenkins/). Note that the image is deprecated.
+* [Modifying Dockerfile](https://github.com/jenkinsci/docker/blob/master/README.md#installing-more-tools)
 
 #### Jenkins configuration
 
 TODO: Groovy hooks.
+
+See [this blog post for more details](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/).
 
 ### Installing plugins
 
@@ -265,7 +268,7 @@ For verifying correctness of library configurations, you can use the same test J
 
 ### Setup IntelliJ IDEA for local development
 
-TODO
+Simply create a new Groovy project in IntelliJ and point TODO
 
 ### References
 
