@@ -35,3 +35,7 @@ COPY init_scripts/src/main/groovy/scripts/System.groovy /usr/share/jenkins/ref/i
 COPY init_scripts/src/main/groovy/scripts/Auth.groovy /usr/share/jenkins/ref/init.groovy.d/Auth.groovy
 COPY init_scripts/src/main/groovy/scripts/Credentials.groovy /usr/share/jenkins/ref/init.groovy.d/Credentials.groovy
 COPY init_scripts/src/main/groovy/scripts/DevelopmentFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevelopmentFolder.groovy
+
+# Secrets are not checked-in
+# Be explicit on what is being used.
+COPY secrets/minikube.pfx /var/jenkins_home/secrets/minikube.pfx

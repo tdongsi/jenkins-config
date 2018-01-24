@@ -203,13 +203,13 @@ change volume mapping when working on Docker image.
 The Minikube client certificate needs to be converted to PKCS, will need a password
 
 ```text
-tdongsi$ openssl pkcs12 -export -out ~/Downloads/minikube.pfx -inkey ~/.minikube/apiserver.key -in ~/.minikube/apiserver.crt -certfile ~/.minikube/ca.crt -passout pass:secret
+tdongsi$ openssl pkcs12 -export -out secrets/minikube.pfx -inkey ~/.minikube/apiserver.key -in ~/.minikube/apiserver.crt -certfile ~/.minikube/ca.crt -passout pass:secret
 ```
 
 Validate that the certificates work
 
 ```text
-tdongsi$ curl --cacert ~/.minikube/ca.crt --cert ~/Downloads/minikube.pfx:secret https://192.168.99.100:8443
+tdongsi$ curl --cacert ~/.minikube/ca.crt --cert secrets/minikube.pfx:secret https://192.168.99.100:8443
 {
   "paths": [
     "/api",

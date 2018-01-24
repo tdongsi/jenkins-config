@@ -22,6 +22,7 @@ import com.cloudbees.plugins.credentials.CredentialsScope
 import jenkins.model.Jenkins
 import hudson.util.Secret
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
+import com.cloudbees.plugins.credentials.impl.CertificateCredentialsImpl
 
 // Based on https://youtu.be/RzWkn_ENVcc?t=2263
 def domain = Domain.global()
@@ -51,3 +52,12 @@ def privateKey = new BasicSSHUserPrivateKey(
         "", // passphrase
         "") // description
 store.addCredentials(domain, privateKey)
+
+String minikubeKeyfile = "/var/jenkins_home/secrets/minikube.pfx"
+def minikubeCreds = new CertificateCredentialsImpl(
+        CredentialsScope.GLOBAL,
+        "minikube",
+        "Minikube client certificate",
+        "secret",
+        new CertificateCredentialsImpl.FileOnMasterKeyStoreSource(minikubeKeyfile))
+store.addCredentials(domain, minikubeCreds)
