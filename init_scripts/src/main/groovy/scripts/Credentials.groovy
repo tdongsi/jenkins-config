@@ -53,7 +53,7 @@ def privateKey = new BasicSSHUserPrivateKey(
         "") // description
 store.addCredentials(domain, privateKey)
 
-String minikubeKeyfile = "/var/jenkins_home/secrets/minikube.pfx"
+String minikubeKeyfile = "/var/jenkins_home/secret_data/minikube.pfx"
 def minikubeCreds = new CertificateCredentialsImpl(
         CredentialsScope.GLOBAL,
         "minikube",

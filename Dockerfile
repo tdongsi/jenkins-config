@@ -38,4 +38,4 @@ COPY init_scripts/src/main/groovy/scripts/DevelopmentFolder.groovy /usr/share/je
 
 # Secrets are not checked-in
 # Be explicit on what is being used.
-COPY secrets/minikube.pfx /var/jenkins_home/secrets/minikube.pfx
+COPY secrets/minikube.pfx /usr/share/jenkins/ref/secret_data/minikube.pfx

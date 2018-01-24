@@ -52,7 +52,7 @@ if (pipelineDir.exists()) {
             println("===== Adding ${pipelineName}")
 
             WorkflowJob job = folder.createProject(WorkflowJob.class, pipelineName)
-            def jobScm = new FSSCM(myPath, false, false, null)
+            def jobScm = new FSSCM(myPath.toString(), false, false, null)
             job.definition = new CpsScmFlowDefinition(jobScm, 'Jenkinsfile')
         }
     }
