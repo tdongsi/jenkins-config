@@ -1,4 +1,4 @@
-FROM cdongsi/jenkins:test
+FROM jenkins/jenkins:lts
 MAINTAINER dongsi.tuecuong@gmail.com
 
 USER root
