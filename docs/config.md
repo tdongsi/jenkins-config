@@ -2,9 +2,12 @@
 
 ### Overview
 
-We use [Groovy Hook Scripts](https://wiki.jenkins.io/display/JENKINS/Groovy+Hook+Script) in [the Docker image](../Dockerfile) for full configuration-as-code in Jenkins with Pipeline and other plugins. 
-This can help us to set up local environment for developing Pipeline libraries and to evaluate various Jenkins features.
-See [this blog post for more details](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/).
+For local development and troubleshooting, we want to mimic production Jenkins as close as possible
+while minimizing manual configuration steps to get there.
+For that purpose, we use Jenkins's `install-plugin.sh` script to install the exactly same set of plugins used in production Jenkins. 
+We also use various [Groovy Hook Scripts](https://wiki.jenkins.io/display/JENKINS/Groovy+Hook+Script) in [the Docker image](../Dockerfile) for configuring Jenkins master into similar settings as production Jenkins. 
+This can help us to easily spin up a running Jenkins instance that have similar settings to production Jenkins.
+See [this blog post](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/) for more details such as purposes of various Groovy codes.
 
 ### Setting up IntelliJ for Groovy script development
 
@@ -27,7 +30,7 @@ Other methods to get similar list can be found in [this Stackoverflow thread](ht
 The `install-plugins.sh` script and supporting files are already in latest Jenkins's Docker image.
 Otherwise, they can be obtained from [this Github](https://github.com/jenkinsci/docker).
 
-#### Kubernetes plugin
+### Special notes on Kubernetes plugin
 
 For Kubernetes plugin, we have to add provisioning flags, based on [its recommendation](https://github.com/jenkinsci/kubernetes-plugin#over-provisioning-flags).
 By default, Jenkins spawns agents conservatively. 
@@ -43,9 +46,7 @@ If you want to override this behaviour and spawn an executor for each build in q
 
 See [here](https://support.cloudbees.com/hc/en-us/articles/115000060512-New-agents-are-not-being-provisioned-for-my-jobs-in-the-queue-when-I-have-agents-that-are-suspended) for meaning of the provision flags above.
 
-
-
-#### Configure Kubernetes plugin
+#### Configure Kubernetes plugin in Minikube
 
 The Minikube client certificate needs to be converted to PKCS, will need a password
 
@@ -81,7 +82,7 @@ Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/mini
 To verify if the plugin is configured correctly and the Kubernetes backend is functional, configure a pod template for slave agents and create a simple test job.
 See [this](agent/README.md) for how to build a slave agent's Docker image and an example job.
 
-#### Update configuration in live Jenkins instance
+### Update configuration in live Jenkins instance
 
 The default configurations of Jenkins are defined in Groovy hook scripts as explained above.
 It helps removing many manual steps whenever starting a new local Jenkins instance for testing.
