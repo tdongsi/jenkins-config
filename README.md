@@ -2,7 +2,7 @@
 
 Jenkins config as code for local development of Groovy-based Pipeline libraries in **Kubernetes** context.
 
-[Quick Start Guide](Quickstart.md).
+[Quick Start Guide](docs/Quickstart.md).
 
 ### Local Kubernetes
 

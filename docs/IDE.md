@@ -7,15 +7,15 @@ It is best to start anew:
 1. Select **File | New Project**
 1. Select **Gradle**
 1. Select **Java** AND **Groovy**
-![Screeshot](images/idea/screen01.png "Start")
+![Screeshot](../images/idea/screen01.png "Start")
 1. Choose **GroupId** and **ArtifactId**
-![Screeshot](images/idea/screen02.png "Project Name")
+![Screeshot](../images/idea/screen02.png "Project Name")
 1. Enter path to Gradle. For Gradle on Mac installed via Homebrew, the Gradle home is like this:
-![Screeshot](images/idea/screen03.png "Configure Gradle")
+![Screeshot](../images/idea/screen03.png "Configure Gradle")
 1. Choose **Project name** and **Project Location**
-![Screeshot](images/idea/screen04.png "Project location")
+![Screeshot](../images/idea/screen04.png "Project location")
 1. Finish
-![Screeshot](images/idea/screen05.png "Finish")
+![Screeshot](../images/idea/screen05.png "Finish")
 
 ## Configure IDEA
 
@@ -27,7 +27,7 @@ Set up for Jenkins Plugins files which are of types **.hpi** or **.jpi**.
 1. Add both **.hpi** and **.jpi**
 1. Select **OK**
 
-![Screeshot](images/idea/screen06.png "Configure plugin files")
+![Screeshot](../images/idea/screen06.png "Configure plugin files")
 
 Modify **build.gradle** to add the following lines.
 

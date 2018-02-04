@@ -58,19 +58,19 @@ Log into Jenkins with username `user` and password `ranger1`.
 
 Use the pre-installed credential "Minikube client certificate".
 
-![Screeshot](images/k8s.png "Configure")
+![Screeshot](../images/k8s.png "Configure")
 
 #### Configure Pod template 
 
 Remember to use the *right Docker image tag* for Jenkins agent.
 
-![Screeshot](images/pod_template.png "Configure")
+![Screeshot](../images/pod_template.png "Configure")
 
 #### Configure "Global Pipeline Libraries" 
 
 For local development, set it to some "Mock Steps Library".
 
-![Screeshot](images/globalLibrary.png "Configure")
+![Screeshot](../images/globalLibrary.png "Configure")
 
 Configure internal global library, if applicable.
 
@@ -99,5 +99,5 @@ lrwxrwxrwx 1 jenkins jenkins 50 Jan 24 02:55 vars -> /var/jenkins_home/code/jenk
 
 ### References
 
-* [Full instructions](README.md)
-* [Docker agent](agent/README.md)
+* [Full instructions](../README.md)
+* [Docker agent](../agent/README.md)
