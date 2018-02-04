@@ -1,62 +1,16 @@
 # jenkins-config
 
-Jenkins config as code for local development of Groovy-based Pipeline libraries.
+Jenkins config as code for local development of Groovy-based Pipeline libraries in **Kubernetes** context.
 
-### How to build and run
-
-```
-docker build -t cdongsi/jenkins:latest .
-
-docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
--v /Users/tdongsi/Mycode:/var/jenkins_home/code cdongsi/jenkins:latest
-```
-
-**Reference**:
-
-* [Base Docker image](https://hub.docker.com/r/jenkins/jenkins/)
-* [Usage instruction](https://hub.docker.com/_/jenkins/). Note that the image is deprecated.
-* [Modifying Dockerfile](https://github.com/jenkinsci/docker/blob/master/README.md#installing-more-tools)
-
-#### Jenkins configuration
-
-TODO: Groovy hooks.
-
-See [this blog post for more details](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/).
-
-### Installing plugins
-
-Construct the list of plugins and versions you want to use in the file `plugins.txt`.
-It is recommended to keep the plugin in alphabetical order for easy record keeping and code review.
-For an existing Jenkins instance, you can obtain its list of installed plugins by running the following Groovy script in its Script Console (accessed via `Manage Jenkins` > `Script Console`):
-
-``` groovy Get list of installed plugins
-Jenkins.instance.pluginManager.plugins.sort { it.shortName }.each {
-  plugin -> 
-    println "${plugin.shortName}:${plugin.version}"
-}
-```
-
-Other methods to get similar list can be found in [this Stackoverflow thread](https://stackoverflow.com/questions/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair).
-The `install-plugins.sh` script and supporting files are already in latest Jenkins's Docker image.
-Otherwise, they can be obtained from [this Github](https://github.com/jenkinsci/docker).
-
-#### Kubernetes plugin
-
-For Kubernetes plugin, we have to add provisioning flags, based on [its recommendation](https://github.com/jenkinsci/kubernetes-plugin#over-provisioning-flags).
-By default, Jenkins spawns agents conservatively. 
-Say, if there are 2 builds in queue, it won't spawn 2 executors immediately. 
-It will spawn one executor and wait for sometime for the first executor to be freed before deciding to spawn the second executor.
-If you want to override this behaviour and spawn an executor for each build in queue immediately without waiting, you can use these flags during Jenkins startup:
-
-```
--Dhudson.slaves.NodeProvisioner.initialDelay=0
--Dhudson.slaves.NodeProvisioner.MARGIN=50
--Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
-```
-
-See [here](https://support.cloudbees.com/hc/en-us/articles/115000060512-New-agents-are-not-being-provisioned-for-my-jobs-in-the-queue-when-I-have-agents-that-are-suspended) for meaning of the provision flags above.
+[Quick Start Guide](Quickstart.md).
 
 ### Local Kubernetes
+
+This project is unique that Jenkins Docker images are separated into master and agent images.
+The containers for Jenkins master and agents are ran and orchestrated by Kubernetes, using Jenkins's Kubernetes plugin.
+By using Minikube for Kubernetes cluster, we can achieve the main target of **reusing** the Docker image for agent used in production Jenkins.
+This will make it easy for troubleshooting and reproducing build issues since all builds are isolated in Jenkins agent containers.
+At most, only Docker image for master should be modified for easy reset of Jenkins development environment (e.g., skipping Jenkins's Setup Wizard). 
 
 #### Installing Minikube
 Install `kubectl` and `minikube`, both from [kubernetes on Github](https://github.com/kubernetes/).
@@ -152,7 +106,63 @@ a85f35566a26: Loading layer [==================================================>
 ...
 ```
 
-#### Deploy Jenkins
+### How to build Jenkins Docker image
+
+```
+docker build -t cdongsi/jenkins:latest .
+
+docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
+-v /Users/tdongsi/Mycode:/var/jenkins_home/code cdongsi/jenkins:latest
+```
+
+**Reference**:
+
+* [Base Docker image](https://hub.docker.com/r/jenkins/jenkins/)
+* [Usage instruction](https://hub.docker.com/_/jenkins/). Note that the image is deprecated.
+* [Modifying Dockerfile](https://github.com/jenkinsci/docker/blob/master/README.md#installing-more-tools)
+
+#### Jenkins configuration
+
+TODO: Groovy hooks.
+
+See [this blog post for more details](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/).
+
+### Installing plugins
+
+Construct the list of plugins and versions you want to use in the file `plugins.txt`.
+It is recommended to keep the plugin in alphabetical order for easy record keeping and code review.
+For an existing Jenkins instance, you can obtain its list of installed plugins by running the following Groovy script in its Script Console (accessed via `Manage Jenkins` > `Script Console`):
+
+``` groovy Get list of installed plugins
+Jenkins.instance.pluginManager.plugins.sort { it.shortName }.each {
+  plugin -> 
+    println "${plugin.shortName}:${plugin.version}"
+}
+```
+
+Other methods to get similar list can be found in [this Stackoverflow thread](https://stackoverflow.com/questions/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair).
+The `install-plugins.sh` script and supporting files are already in latest Jenkins's Docker image.
+Otherwise, they can be obtained from [this Github](https://github.com/jenkinsci/docker).
+
+#### Kubernetes plugin
+
+For Kubernetes plugin, we have to add provisioning flags, based on [its recommendation](https://github.com/jenkinsci/kubernetes-plugin#over-provisioning-flags).
+By default, Jenkins spawns agents conservatively. 
+Say, if there are 2 builds in queue, it won't spawn 2 executors immediately. 
+It will spawn one executor and wait for sometime for the first executor to be freed before deciding to spawn the second executor.
+If you want to override this behaviour and spawn an executor for each build in queue immediately without waiting, you can use these flags during Jenkins startup:
+
+```
+-Dhudson.slaves.NodeProvisioner.initialDelay=0
+-Dhudson.slaves.NodeProvisioner.MARGIN=50
+-Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
+```
+
+See [here](https://support.cloudbees.com/hc/en-us/articles/115000060512-New-agents-are-not-being-provisioned-for-my-jobs-in-the-queue-when-I-have-agents-that-are-suspended) for meaning of the provision flags above.
+
+
+
+### Deploy Jenkins
 
 Use the pre-defined YAML file.
 
