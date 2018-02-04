@@ -6,13 +6,14 @@ Jenkins config as code for local development of Groovy-based Pipeline libraries 
 
 ### Local Kubernetes
 
-This project is unique that Jenkins Docker images are separated into master and agent images.
+This project is mostly about modifying **Jenkins master**'s Docker image (e.g., `jenkins:lts`) for easy reset of Jenkins development environment (e.g., allows skipping Jenkins's Setup Wizard).
+Its difference from other similar projects is in **Kubernetes context** and that means Jenkins Docker images are separated into master and agent images.
 The containers for Jenkins master and agents are ran and orchestrated by Kubernetes, using Jenkins's Kubernetes plugin.
-By using Minikube for Kubernetes cluster, we can achieve the main target of **reusing** the Docker image for agent used in production Jenkins.
-This will make it easy for troubleshooting and reproducing build issues since all builds are isolated in Jenkins agent containers.
-At most, only Docker image for master should be modified for easy reset of Jenkins development environment (e.g., skipping Jenkins's Setup Wizard). 
+By using Minikube for local development environment, we can achieve the main target of **reusing** the Docker image for Jenkins agent used in production Jenkins.
+This will make it easy for troubleshooting and reproducing build issues since all builds are isolated in Jenkins agent containers. 
 
 #### Installing Minikube
+
 Install `kubectl` and `minikube`, both from [kubernetes on Github](https://github.com/kubernetes/).
 
 ```plain Install minikube
@@ -108,14 +109,16 @@ a85f35566a26: Loading layer [==================================================>
 
 ### How to build Jenkins Docker image
 
+Since you will be deploying the Jenkins Docker image the minikube, it’s really handy to reuse the minikube’s built-in Docker daemon for Docker build.
+The resulting Docker image will be available to minikube directly, without the need of pushing the image from your host machine into minikube VM. 
+See full details [here](https://kubernetes.io/docs/getting-started-guides/minikube/#reusing-the-docker-daemon).
+
 ```
+eval $(minikube docker-env)
 docker build -t cdongsi/jenkins:latest .
-
-docker run -p 8080:8080 -p 50000:50000 -v /data/mydata:/var/jenkins_home \
--v /Users/tdongsi/Mycode:/var/jenkins_home/code cdongsi/jenkins:latest
 ```
 
-**Reference**:
+**Reference for base image**:
 
 * [Base Docker image](https://hub.docker.com/r/jenkins/jenkins/)
 * [Usage instruction](https://hub.docker.com/_/jenkins/). Note that the image is deprecated.
