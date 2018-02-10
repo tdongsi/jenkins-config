@@ -55,4 +55,44 @@ NOTE 2: The `ext: 'jar'` is VERY important to ensure that `jar` files, instead o
 Without that `ext` option specified, IntellJ won't find JAR files nested in `hpi`/`jpi` files which is the default binaries for Jenkins plugins.
 
 The final **build.gradle** will look like [this](https://github.com/tdongsi/jenkins-steps-override/blob/master/build.gradle).
+All of the above setup should suffice for working with [Groovy Init Scripts](http://tdongsi.github.io/blog/2017/12/30/groovy-hook-script-and-jenkins-configuration-as-code/).
+For working with Jenkins Shared Pipeline Libraries, we should take one extra step shown as follows. 
 
+### Setup for Jenkins pipeline library
+
+All Groovy files in Jenkins shared library for Pipelines have to follow this directory structure:
+
+```text Directory structure of a Shared Library repository
+(root)
++- src                     # Groovy source files
+|   +- org
+|       +- foo
+|           +- Bar.groovy  # for org.foo.Bar class
++- vars
+|   +- foo.groovy          # for global 'foo' variable
+|   +- foo.txt             # help for 'foo' variable
++- resources               # resource files (external libraries only)
+|   +- org
+|       +- foo
+|           +- bar.json    # static helper data for org.foo.Bar
+```
+
+Note that the Groovy code can be in both [`src`](http://tdongsi.github.io/blog/2017/12/26/class-in-jenkins-shared-library/)
+and [`vars`](http://tdongsi.github.io/blog/2017/03/17/jenkins-pipeline-shared-libraries/) folders.
+Therefore, you need to add the following lines in `build.gradle` to inform Gradle locations of Groovy source codes:
+
+```groovy
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['vars', 'src']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test/groovy']
+        }
+    }
+}
+```
