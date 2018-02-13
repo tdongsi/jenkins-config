@@ -46,7 +46,7 @@ service "jenkins" created
 
 tdongsi-ltm4:jenkins-config tdongsi$ kubectl --namespace=sfdc get services
 NAME      CLUSTER-IP       EXTERNAL-IP   PORT(S)                                        AGE
-jenkins   10.104.225.173   <nodes>       80:30980/TCP,12222:30922/TCP,50000:30900/TCP   2m
+jenkins   10.106.142.80    <nodes>       80:30980/TCP,12222:30922/TCP,50000:30900/TCP   2m
 ```
 
 ### Configure Jenkins

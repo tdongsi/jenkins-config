@@ -77,7 +77,8 @@ Add a Jenkins credential of type "Certificate", upload it from `~/.minikube/mini
 * Disable https certificate check: Check if you use `http` in Kubernetes URL.
 * Credentials: Use the one that you just created with `minikube.pfx` file.
 * Use *Test Connection* button to verify your Kubernetes configuration.
-* Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output.
+* Jenkins URL: Use the Cluster IP from `kubectl get service jenkins` command output. 
+  * If `kube-dns` is already installed and running, you should use `<service-name>.<namespace-name>.svc.cluster.local`, such as `jenkins.sfdc.svc.cluster.local`.
 
 To verify if the plugin is configured correctly and the Kubernetes backend is functional, configure a pod template for slave agents and create a simple test job.
 See [this](agent/README.md) for how to build a slave agent's Docker image and an example job.
