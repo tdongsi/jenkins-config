@@ -33,7 +33,7 @@ if (!file.exists()) {
 }
 
 
-def scm = new FSSCM(libraryPath, false, false, null) // parameters: path, clearWorkspace, copyHidden, filterSettings
+def scm = new FSSCM(libraryPath, false, false, null)
 LibraryConfiguration lc = new LibraryConfiguration(libraryRepo, new SCMRetriever(scm))
 lc.with {
     implicit = true

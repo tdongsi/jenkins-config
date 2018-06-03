@@ -22,6 +22,7 @@ boolean isGranularityNeeded = true
 if ( !isGranularityNeeded ) {
 
     // Easy way first: No granularity needed
+    // "Logged in user can do anything" strategy in GUI
     def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
     strategy.setAllowAnonymousRead(false)
     instance.setAuthorizationStrategy(strategy)
@@ -29,6 +30,7 @@ if ( !isGranularityNeeded ) {
 } else {
     // NOTE: Make sure matrix-auth plugin is installed. Check plugins.txt file.
     // This can help reproduce certain user's permission
+    // "Matrix Authorization" strategy in GUI
     def strategy = new GlobalMatrixAuthorizationStrategy()
 
     String USER = 'authenticated' // or 'admin'
