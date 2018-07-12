@@ -29,12 +29,12 @@ RUN mkdir -p ${HOME}/.ssh &&\
 VOLUME /var/jenkins_home/code
 
 # Configs that make sense in local and production environment
-COPY init_scripts/src/main/groovy/scripts/System.groovy /usr/share/jenkins/ref/init.groovy.d/System.groovy
+COPY src/main/groovy/System.groovy /usr/share/jenkins/ref/init.groovy.d/System.groovy
 
 # The following configs are only applicable in local development
-COPY init_scripts/src/main/groovy/scripts/Auth.groovy /usr/share/jenkins/ref/init.groovy.d/Auth.groovy
-COPY init_scripts/src/main/groovy/scripts/Credentials.groovy /usr/share/jenkins/ref/init.groovy.d/Credentials.groovy
-COPY init_scripts/src/main/groovy/scripts/DevelopmentFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevelopmentFolder.groovy
+COPY src/main/groovy/Auth.groovy /usr/share/jenkins/ref/init.groovy.d/Auth.groovy
+COPY src/main/groovy/Credentials.groovy /usr/share/jenkins/ref/init.groovy.d/Credentials.groovy
+COPY src/main/groovy/DevelopmentFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevelopmentFolder.groovy
 
 # Secrets are not checked-in
 # Be explicit on what is being used.
