@@ -37,11 +37,11 @@ spec:
       volumes:
         - name: "mdata"
           hostPath:
-            path: "/data/sfdc" # alternate for testing Docker image
-            # path: "/data/mydata" # persistent in Minikube
+            # path: "/data/sfdc" # alternate for testing Docker image
+            path: "/data/mydata" # persistent in Minikube
         - name: "code"
           hostPath:
-            path: "/Users/tdongsi/Matrix"
+            path: "/Users/tuecuong/Matrix"
       #nodeSelector:
         #disktype: EBS
 ---
