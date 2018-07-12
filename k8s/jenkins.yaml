@@ -5,7 +5,7 @@ metadata:
   name: "jenkins"
   labels:
     name: "jenkins"
-  namespace: "sfdc"
+  namespace: "myspace"
 spec:
   replicas: 1
   template:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: "jenkins"
-          image: "cdongsi/jenkins:0.09"
+          image: "cdongsi/jenkins:0.10"
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -49,7 +49,7 @@ apiVersion: "v1"
 kind: "Service"
 metadata:
   name: "jenkins"
-  namespace: "sfdc"
+  namespace: "myspace"
 spec:
   type: "NodePort"
   selector:
