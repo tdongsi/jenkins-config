@@ -24,3 +24,4 @@ hs_err_pid*
 *.iml
 agent/docker
 secrets
+docker-17.12.1-ce.tgz

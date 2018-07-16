@@ -34,7 +34,7 @@ COPY src/main/groovy/System.groovy /usr/share/jenkins/ref/init.groovy.d/System.g
 # The following configs are only applicable in local development
 COPY src/main/groovy/Auth.groovy /usr/share/jenkins/ref/init.groovy.d/Auth.groovy
 COPY src/main/groovy/Credentials.groovy /usr/share/jenkins/ref/init.groovy.d/Credentials.groovy
-COPY src/main/groovy/DevelopmentFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevelopmentFolder.groovy
+COPY src/main/groovy/DevFolder.groovy /usr/share/jenkins/ref/init.groovy.d/DevFolder.groovy
 
 # Secrets are not checked-in
 # Be explicit on what is being used.
