@@ -31,3 +31,8 @@ blueocean-i18n:1.6.2
 blueocean-jira:1.6.2
 blueocean-jwt:1.6.2
 ```
+
+**Notes from other users**:
+
+* The last line in the plugin list file is ignored, the workaround is simply to end your plugin list file with a blank line.
+* Note that the `set -e` breaks dep resolution in the event that a plugin without deps ends up first in the plugins directory because the unzip pipe fails. You can either turn off `set -e`, or add `||true` to the end of the unzip pipe.
