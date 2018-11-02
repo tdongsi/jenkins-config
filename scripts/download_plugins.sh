@@ -2,15 +2,19 @@
 
 set -e
 
-if [ $# -eq 0 ]; then
-  echo "USAGE: $0 plugin1 plugin2 ..."
+UPDATES_URL="http://updates.jenkins-ci.org/download/plugins/"
+
+if [ $# -lt 2 ]; then
+  echo "USAGE: $0 plugin-list-file destination-directory"
   exit 1
 fi
 
-plugin_dir=/var/lib/jenkins/plugins
-file_owner=jenkins.jenkins
+plugin_list=$1
+plugin_dir=$2
 
-mkdir -p /var/lib/jenkins/plugins
+#file_owner=jenkins.jenkins
+
+mkdir -p $plugin_dir
 
 installPlugin() {
   if [ -f ${plugin_dir}/${1}.hpi -o -f ${plugin_dir}/${1}.jpi ]; then
@@ -21,15 +25,22 @@ installPlugin() {
     return 0
   else
     echo "Installing: $1"
-    curl -L --silent --output ${plugin_dir}/${1}.hpi  https://updates.jenkins-ci.org/latest/${1}.hpi
+    curl -L --silent --output ${plugin_dir}/${1}.hpi  ${UPDATES_URL}/${1}/${2}/${1}.hpi
     return 0
   fi
 }
 
-for plugin in $*
+while IFS=":" read plugin version
 do
-    installPlugin "$plugin"
-done
+    #escape comments
+    if [[ $plugin =~ ^# ]]; then
+       continue
+    fi
+
+    #install the plugin
+    installPlugin $plugin $version
+done < $plugin_list
+
 
 changed=1
 maxloops=100
@@ -43,18 +54,22 @@ while [ "$changed"  == "1" ]; do
   ((maxloops--))
   changed=0
   for f in ${plugin_dir}/*.hpi ; do
-    # without optionals
-    #deps=$( unzip -p ${f} META-INF/MANIFEST.MF | tr -d '\r' | sed -e ':a;N;$!ba;s/\n //g' | grep -e "^Plugin-Dependencies: " | awk '{ print $2 }' | tr ',' '\n' | grep -v "resolution:=optional" | awk -F ':' '{ print $1 }' | tr '\n' ' ' )
-    # with optionals
-    deps=$( unzip -p ${f} META-INF/MANIFEST.MF | tr -d '\r' | sed -e ':a;N;$!ba;s/\n //g' | grep -e "^Plugin-Dependencies: " | awk '{ print $2 }' | tr ',' '\n' | awk -F ':' '{ print $1 }' | tr '\n' ' ' )
-    for plugin in $deps; do
-      installPlugin "$plugin" 1 && changed=1
-    done
+    # get a list of only non-optional dependencies
+    deps=$( unzip -p ${f} META-INF/MANIFEST.MF|tr -d '\r' | sed -e ':a;N;$!ba;s/\n //g' | grep -e 'Plugin-Dependencies' | awk '{print $2}' | tr "," "\n" | grep -v 'resolution:=optional')
+    
+    #if deps were found, install them .. then set changed, so we re-loop all over all xpi's 
+    if [[ ! -z $deps ]]; then
+       echo $deps | tr ' ' '\n' | 
+       while IFS=: read plugin version; do
+          installPlugin $plugin $version
+       done
+       changed=1
+    fi
   done
 done
 
-echo "fixing permissions"
+#echo "fixing permissions"
 
-chown ${file_owner} ${plugin_dir} -R
+#chown ${file_owner} ${plugin_dir} -R
 
 echo "all done"
