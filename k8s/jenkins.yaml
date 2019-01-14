@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: "jenkins"
-          image: "cdongsi/jenkins:0.10"
+          image: "cdongsi/jenkins:1.11"
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
