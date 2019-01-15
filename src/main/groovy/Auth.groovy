@@ -6,6 +6,7 @@ import hudson.model.*
 import com.cloudbees.plugins.credentials.CredentialsProvider
 import hudson.PluginManager
 import org.jenkinsci.plugins.workflow.cps.replay.ReplayAction
+import hudson.scm.SCM
 
 println("=== Installing the Security Realm")
 def instance = Jenkins.getInstance()
@@ -34,15 +35,11 @@ if ( !isGranularityNeeded ) {
     def strategy = new GlobalMatrixAuthorizationStrategy()
 
     String USER = 'authenticated' // or 'admin'
-
-    //  Slave Permissions
-    strategy.add(hudson.model.Computer.BUILD,USER)
-    strategy.add(hudson.model.Computer.CONFIGURE,USER)
-    strategy.add(hudson.model.Computer.CONNECT,USER)
-    strategy.add(hudson.model.Computer.CREATE,USER)
-    strategy.add(hudson.model.Computer.DELETE,USER)
-    strategy.add(hudson.model.Computer.DISCONNECT,USER)
-
+    
+    //  Overall Permissions
+    strategy.add(hudson.model.Hudson.ADMINISTER,USER)
+    strategy.add(hudson.model.Hudson.READ,USER)
+    
     //  Credential Permissions
     strategy.add(com.cloudbees.plugins.credentials.CredentialsProvider.CREATE,USER)
     strategy.add(com.cloudbees.plugins.credentials.CredentialsProvider.DELETE,USER)
@@ -50,12 +47,13 @@ if ( !isGranularityNeeded ) {
     strategy.add(com.cloudbees.plugins.credentials.CredentialsProvider.UPDATE,USER)
     strategy.add(com.cloudbees.plugins.credentials.CredentialsProvider.VIEW,USER)
 
-    //  Overall Permissions
-    strategy.add(hudson.model.Hudson.ADMINISTER,USER)
-    strategy.add(hudson.PluginManager.CONFIGURE_UPDATECENTER,USER)
-    strategy.add(hudson.model.Hudson.READ,USER)
-    strategy.add(hudson.model.Hudson.RUN_SCRIPTS,USER)
-    strategy.add(hudson.PluginManager.UPLOAD_PLUGINS,USER)
+    //  Agent Permissions
+    strategy.add(hudson.model.Computer.BUILD,USER)
+    strategy.add(hudson.model.Computer.CONFIGURE,USER)
+    strategy.add(hudson.model.Computer.CONNECT,USER)
+    strategy.add(hudson.model.Computer.CREATE,USER)
+    strategy.add(hudson.model.Computer.DELETE,USER)
+    strategy.add(hudson.model.Computer.DISCONNECT,USER)
 
     //  Job Permissions
     strategy.add(hudson.model.Item.BUILD,USER)
@@ -77,6 +75,9 @@ if ( !isGranularityNeeded ) {
     strategy.add(hudson.model.View.CREATE,USER)
     strategy.add(hudson.model.View.DELETE,USER)
     strategy.add(hudson.model.View.READ,USER)
+    
+    // SCM Permission
+    strategy.add(hudson.scm.SCM.TAG,USER)
 
     instance.setAuthorizationStrategy(strategy)
 }
