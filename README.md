@@ -4,6 +4,8 @@ Jenkins config as code for local development of Groovy-based Pipeline libraries 
 
 [Quick Start Guide](docs/Quickstart.md).
 
+NOTE (added Oct 2019): This project is started before [Jenkins Config as Code plugin](https://jenkins.io/projects/jcasc/). Compared to that plugin, this project uses [Groovy hooks](https://wiki.jenkins.io/display/JENKINS/Groovy+Hook+Script) to initialize the Jenkins container upon starting up. While Groovy hooks are more flexible, customizing those requires advanced knowledge of Jenkins. 
+ 
 ### Local Kubernetes
 
 This project is mostly about modifying **Jenkins master**'s Docker image (e.g., `jenkins:lts`) for easy reset of Jenkins development environment (e.g., allows skipping Jenkins's Setup Wizard).
